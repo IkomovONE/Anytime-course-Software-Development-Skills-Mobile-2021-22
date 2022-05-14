@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -124,6 +123,7 @@ class Fields extends StatelessWidget {
   Fields(this.text, this.heightt, this.widthh);
   @override
   Widget build(BuildContext context) {
+    String nickname;
     return  Container(
       height: heightt,
       width: widthh,
@@ -133,10 +133,17 @@ class Fields extends StatelessWidget {
         borderRadius: const BorderRadius.all(Radius.circular(15)),
       ),
       child: Align( alignment: Alignment.center,
-        child: TextField(
+        child: TextFormField(
+
+            onFieldSubmitted: (value) {
+
+              nickname = value;
+
+            },
 
           cursorColor: Colors.deepOrange,
             cursorWidth: 7.0,
+
 
             decoration: InputDecoration(
                 contentPadding:
@@ -156,8 +163,11 @@ class PassFields extends StatelessWidget {
   double heightt;
   double widthh;
   PassFields(this.text, this.heightt, this.widthh);
+
+
   @override
   Widget build(BuildContext context) {
+    String password;
     return  Container(
       height: heightt,
       width: widthh,
@@ -168,6 +178,13 @@ class PassFields extends StatelessWidget {
       ),
       child: Align( alignment: Alignment.center,
         child: TextFormField(
+
+          onFieldSubmitted: (value) {
+
+              password = value;
+              print(password);
+
+          },
 
             cursorColor: Colors.deepOrange,
             cursorWidth: 7.0,
@@ -187,6 +204,8 @@ class PassFields extends StatelessWidget {
             style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.deepOrange, fontSize: 20.0, fontStyle: FontStyle.normal)),),
     );
   }
+
+
 }
 
 
@@ -225,6 +244,4 @@ class LoginButton extends StatelessWidget {
     );
   }
 }
-
-
 

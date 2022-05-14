@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:chattt/Login.dart';
+import 'package:chattt/Register.dart';
 
 
 void main() {
@@ -65,7 +66,7 @@ class MyApp extends StatelessWidget {
                     borderRadius: BorderRadius.circular(30)),
                 color: Theme.of(context).primaryColor,
                 child: const Text("Join ChumTalk", style: TextStyle(color: Colors.deepOrangeAccent, fontWeight: FontWeight.bold, fontSize: 25),),
-                onPressed: () {},
+                onPressed: () {Navigator.of(context).push(RouteToRegister());},
               ),
             ),
 
@@ -113,7 +114,7 @@ Route RouteToLogin() {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) => const Login(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      const begin = Offset(0.0, 1.0);
+      const begin = Offset(4.0, 6.0);
       const end = Offset.zero;
       final tween = Tween(begin: begin, end: end);
       final offsetAnimation = animation.drive(tween);
@@ -122,6 +123,29 @@ Route RouteToLogin() {
         position: animation.drive(tweeen),
         child: child,
       );
+
+      //https://docs.flutter.dev/cookbook/animation/page-route-animation
+    },
+  );
+}
+
+Route RouteToRegister() {
+  var curve = Curves.ease;
+  var curveTween = CurveTween(curve: curve);
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => Register(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(4.0, 6.0);
+      const end = Offset.zero;
+      final tween = Tween(begin: begin, end: end);
+      final offsetAnimation = animation.drive(tween);
+      var tweeen = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+      return SlideTransition(
+        position: animation.drive(tweeen),
+        child: child,
+      );
+
+      //https://docs.flutter.dev/cookbook/animation/page-route-animation
     },
   );
 }
