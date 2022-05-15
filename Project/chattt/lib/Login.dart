@@ -1,8 +1,10 @@
 import 'dart:ui';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:chattt/main.dart';
+
 
 class Login extends StatelessWidget {
   const Login({Key? key}) : super(key: key);
@@ -72,6 +74,8 @@ class Login extends StatelessWidget {
 
 
 class Columns extends StatelessWidget {
+
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -85,29 +89,10 @@ class Columns extends StatelessWidget {
 
 
 
-
-
-
-
-
               Row(mainAxisAlignment: MainAxisAlignment.center,children: <Widget>[
-                Fields("  Your Nickname", 50.0, 350.0) ]),
-
-              const SizedBox(height: 50),
+                PassFields() ]),
 
 
-
-
-              Row(mainAxisAlignment: MainAxisAlignment.center,children: <Widget>[
-                PassFields("  Your Password", 50.0, 350.0) ]),
-
-              const SizedBox(height: 80),
-
-              Row(mainAxisAlignment: MainAxisAlignment.center,children: <Widget>[
-                LoginButton("Login", 50.0, 350.0),
-              ]),
-
-              const SizedBox(height: 25),
 
             ]));
   }
@@ -116,61 +101,84 @@ class Columns extends StatelessWidget {
 
 
 
-class Fields extends StatelessWidget {
-  final String text;
-  double heightt;
-  double widthh;
-  Fields(this.text, this.heightt, this.widthh);
-  @override
-  Widget build(BuildContext context) {
-    String nickname;
-    return  Container(
-      height: heightt,
-      width: widthh,
-      decoration: BoxDecoration(
-        border: Border.all(color: Theme.of(context).accentColor, width: 2),
-        color: Theme.of(context).primaryColor,
-        borderRadius: const BorderRadius.all(Radius.circular(15)),
-      ),
-      child: Align( alignment: Alignment.center,
-        child: TextFormField(
-
-            onFieldSubmitted: (value) {
-
-              nickname = value;
-
-            },
-
-          cursorColor: Colors.deepOrange,
-            cursorWidth: 7.0,
 
 
-            decoration: InputDecoration(
-                contentPadding:
-                EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
 
-                focusedBorder: InputBorder.none,
-                hintText: text,
-                hintStyle: const TextStyle(fontWeight: FontWeight.bold, color: Colors.deepOrange, fontSize: 20.0, fontStyle: FontStyle.normal)),
-            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.deepOrange, fontSize: 20.0, fontStyle: FontStyle.normal)),),
-    );
-  }
+
+
+class PassFields extends StatefulWidget {
+
+  ChangePassword createState() => ChangePassword();
 }
 
-class PassFields extends StatelessWidget {
 
-  final String text;
-  double heightt;
-  double widthh;
-  PassFields(this.text, this.heightt, this.widthh);
+class ChangePassword extends State {
+  late String password= "";
+  late String nickname= "";
+
+  SetPassword(String value){
+    setState(() {
+      password= value;
+    }
+    );
+  }
+
+  SetNickname(String nick){
+    setState(() {
+      nickname= nick;
+    }
+    );
+  }
+
 
 
   @override
   Widget build(BuildContext context) {
-    String password;
-    return  Container(
-      height: heightt,
-      width: widthh,
+
+    return  Column(
+
+      children: <Widget>[
+
+        Container(
+          height: 50,
+          width: 350,
+          decoration: BoxDecoration(
+            border: Border.all(color: Theme.of(context).accentColor, width: 2),
+            color: Theme.of(context).primaryColor,
+            borderRadius: const BorderRadius.all(Radius.circular(15)),
+          ),
+          child: Align( alignment: Alignment.center,
+            child: TextFormField(
+
+                onChanged: (nick) {
+
+                  SetNickname(nick);
+
+                },
+
+                cursorColor: Colors.deepOrange,
+                cursorWidth: 7.0,
+
+
+                decoration: const InputDecoration(
+                    contentPadding:
+                    EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+
+                    focusedBorder: InputBorder.none,
+                    hintText: "Your nickname",
+                    hintStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.deepOrange, fontSize: 20.0, fontStyle: FontStyle.normal)),
+                style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.deepOrange, fontSize: 20.0, fontStyle: FontStyle.normal)),),
+        ),
+
+
+        SizedBox(height: 50),
+
+
+
+
+        Container(
+      height: 50,
+      width: 350,
       decoration: BoxDecoration(
         border: Border.all(color: Theme.of(context).accentColor, width: 2),
         color: Theme.of(context).primaryColor,
@@ -179,19 +187,16 @@ class PassFields extends StatelessWidget {
       child: Align( alignment: Alignment.center,
         child: TextFormField(
 
-          onFieldSubmitted: (value) {
+          onChanged: (value) {
 
-              password = value;
-              print(password);
+              SetPassword(value);
+
 
           },
-
             cursorColor: Colors.deepOrange,
             cursorWidth: 7.0,
             obscureText: true,
-
-            decoration: InputDecoration(
-
+            decoration: const InputDecoration(
                 contentPadding:
                 EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
                 border: InputBorder.none,
@@ -199,33 +204,17 @@ class PassFields extends StatelessWidget {
                 enabledBorder: InputBorder.none,
                 errorBorder: InputBorder.none,
                 disabledBorder: InputBorder.none,
-                hintText: text,
-                hintStyle: const TextStyle(fontWeight: FontWeight.bold, color: Colors.deepOrange, fontSize: 20.0, fontStyle: FontStyle.normal)),
+                hintText: "Your Password",
+                hintStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.deepOrange, fontSize: 20.0, fontStyle: FontStyle.normal)),
             style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.deepOrange, fontSize: 20.0, fontStyle: FontStyle.normal)),),
-    );
-  }
+    ),
+
+        SizedBox(height: 80),
 
 
-}
-
-
-
-
-
-
-
-class LoginButton extends StatelessWidget {
-  final String number;
-  double heightt;
-  double widthh;
-
-  LoginButton(this.number, this.heightt, this.widthh);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: heightt,
-      width: widthh,
+     Container(
+      height: 50,
+      width: 350,
 
       decoration: BoxDecoration(
         border: Border.all(color: Colors.deepOrangeAccent, width: 2),
@@ -234,14 +223,47 @@ class LoginButton extends StatelessWidget {
       ),
       child: RaisedButton(
         color: Theme.of(context).primaryColor,
-          onPressed: () {},
-          child: Text(number,
-            style: const TextStyle(fontWeight: FontWeight.bold,
+          onPressed: () {
+
+
+          Auth().signUp(nickname: nickname, password: password);
+
+
+
+          },
+          child: const Text("Login",
+            style: TextStyle(fontWeight: FontWeight.bold,
                 color: Colors.deepOrangeAccent,
                 fontSize: 25.0,
                 fontStyle: FontStyle.normal),
           )),
-    );
+    ),],);
+
+
+
   }
 }
+
+
+
+
+
+
+class Auth {
+
+  Future<String> signUp({required String nickname, required String password}) async{
+
+    late final FirebaseAuth _firebaseAuth= FirebaseAuth.instance;
+    try{
+
+       _firebaseAuth.signInWithEmailAndPassword(email: nickname, password: password);
+
+      return "Signed in";
+    }
+    on FirebaseAuthException catch (e) {
+      return "Error";
+    }
+  }
+}
+
 

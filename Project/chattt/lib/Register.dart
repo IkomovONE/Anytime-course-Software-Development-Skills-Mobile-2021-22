@@ -1,17 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 
-class Register extends StatelessWidget {
+class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
+
+  setCredentials createState() => setCredentials();
+
+}
+
+class setCredentials extends State {
+
+  late String password= "";
+  late String nickname= "";
+
+
+  SetPassword(String value){
+    setState(() {
+      password= value;
+    }
+    );
+  }
+
+  SetNickname(String nick){
+    setState(() {
+      nickname= nick;
+    }
+    );
+  }
+
 
 
 
   @override
   Widget build(BuildContext context) {
 
-    String nickname;
-    String password;
+
 
     return GestureDetector(
         onTap: () {
@@ -91,9 +116,9 @@ class Register extends StatelessWidget {
         child: Align( alignment: Alignment.center,
           child: TextFormField(
 
-              onFieldSubmitted: (name) {
+              onChanged: (name) {
 
-                nickname = name;
+                SetNickname(name);
 
 
               },
@@ -129,10 +154,9 @@ class Register extends StatelessWidget {
               child: Align( alignment: Alignment.center,
                 child: TextFormField(
 
-                    onFieldSubmitted: (value) {
+                    onChanged: (value) {
 
-                      password = value;
-
+                      SetPassword(value);
 
                     },
 
@@ -158,6 +182,7 @@ class Register extends StatelessWidget {
 
 
 
+
             Container(
               height: 50,
               width: 350,
@@ -169,7 +194,10 @@ class Register extends StatelessWidget {
               ),
               child: RaisedButton(
                   color: Theme.of(context).primaryColor,
-                  onPressed: () {},
+                  onPressed: () {
+
+                    Auth().Register(nickname: nickname, password: password);
+                  },
                   child: const Text("Register",
                     style: TextStyle(fontWeight: FontWeight.bold,
                         color: Colors.deepOrangeAccent,
@@ -198,4 +226,24 @@ class Register extends StatelessWidget {
 
   }
 
+}
+
+
+class Auth {
+
+  Future<String> Register({required String nickname, required String password}) async{
+
+    late final FirebaseAuth _firebaseAuth= FirebaseAuth.instance;
+    try{
+
+
+
+      _firebaseAuth.createUserWithEmailAndPassword(email: nickname, password: password);
+
+      return "Signed in";
+    }
+    on FirebaseAuthException catch (e) {
+      return "Error";
+    }
+  }
 }
