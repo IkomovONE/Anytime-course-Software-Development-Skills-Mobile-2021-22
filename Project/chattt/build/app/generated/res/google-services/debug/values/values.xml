@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">438625303818-o46v00fqbaf5jqjo3mo78oci6eecn1pr.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">438625303818</string>
+    <string name="google_api_key" translatable="false">AIzaSyAG0V03fVES6NTZJcjMHoYokZRra7TjF84</string>
+    <string name="google_app_id" translatable="false">1:438625303818:android:d179733559b666bf258ef3</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyAG0V03fVES6NTZJcjMHoYokZRra7TjF84</string>
+    <string name="google_storage_bucket" translatable="false">chumtalk-85d3b.appspot.com</string>
+    <string name="project_id" translatable="false">chumtalk-85d3b</string>
+</resources>

@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/ikomovone/Desktop/Repository/Project/chattt/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-night-v8/values-night-v8.xml",
+            "outputFile": "C:\\Users\\Daniil Komov\\Desktop\\Anytime-course-Software-Development-Skills-Mobile-2021-22-main\\Project\\chattt\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-night-v8\\values-night-v8.xml",
             "map": [
                 {
-                    "source": "/Users/ikomovone/Desktop/Repository/Project/chattt/android/app/src/main/res/values-night/styles.xml",
+                    "source": "C:\\Users\\Daniil Komov\\Desktop\\Anytime-course-Software-Development-Skills-Mobile-2021-22-main\\Project\\chattt\\android\\app\\src\\main\\res\\values-night\\styles.xml",
                     "from": {
                         "startLines": "3,14",
                         "startColumns": "4,4",

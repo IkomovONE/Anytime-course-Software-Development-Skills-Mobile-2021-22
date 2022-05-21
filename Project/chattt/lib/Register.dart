@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:chattt/Loading.dart';
+import 'package:chattt/Groups.dart';
+import 'package:chattt/main.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -38,7 +40,9 @@ class setCredentials extends State {
 
 
 
-    return GestureDetector(
+    return WillPopScope(
+        onWillPop: () async => false,
+    child: GestureDetector(
         onTap: () {
       FocusScopeNode currentFocus = FocusScope.of(context);
 
@@ -77,7 +81,11 @@ class setCredentials extends State {
                           borderRadius: const BorderRadius.all(Radius.circular(15)),),
 
                         child: ElevatedButton.icon(
-                          onPressed: () => Navigator.of(context).pop(),
+                          onPressed: () => Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => const MainPage()),
+
+                                (Route<dynamic> route) => false,),
                           icon: const Icon(Icons.arrow_back_ios, size: 40, color: Colors.deepOrangeAccent),
                           label: const Text("Back", style: TextStyle(color: Colors.deepOrangeAccent, fontSize: 20, fontWeight: FontWeight.bold,),),
 
@@ -197,6 +205,41 @@ class setCredentials extends State {
                   onPressed: () {
 
                     Auth().Register(nickname: nickname, password: password);
+
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Loading()),
+                    );
+
+                    Future<void> Check() async{
+
+                      await Future<void>.delayed(Duration(seconds: 2), () {
+
+
+
+
+                        if (FirebaseAuth.instance.currentUser != null) {
+
+                          Navigator.of(context).push(RouteToGroups());
+
+                        }
+
+                        else {
+
+                          Navigator.pop(context);
+
+                          print("Not signed in");
+                        }
+
+                      });
+                    }
+
+
+                    Check();
+
+
+
                   },
                   child: const Text("Register",
                     style: TextStyle(fontWeight: FontWeight.bold,
@@ -220,7 +263,7 @@ class setCredentials extends State {
 
 
 
-    ),);
+    ),));
 
 
 
@@ -246,4 +289,28 @@ class Auth {
       return "Error";
     }
   }
+}
+
+
+
+
+Route RouteToGroups() {
+  var curve = Curves.ease;
+  var curveTween = CurveTween(curve: curve);
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => const Groups(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(4.0, 6.0);
+      const end = Offset.zero;
+      final tween = Tween(begin: begin, end: end);
+      final offsetAnimation = animation.drive(tween);
+      var tweeen = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+      return SlideTransition(
+        position: animation.drive(tweeen),
+        child: child,
+      );
+
+      //https://docs.flutter.dev/cookbook/animation/page-route-animation
+    },
+  );
 }

@@ -4,6 +4,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:chattt/main.dart';
+import 'package:chattt/Groups.dart';
+import 'package:chattt/Loading.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 
 class Login extends StatelessWidget {
@@ -12,7 +15,9 @@ class Login extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  GestureDetector(
+    return  WillPopScope(
+        onWillPop: () async => false,
+    child: GestureDetector(
         onTap: () {
       FocusScopeNode currentFocus = FocusScope.of(context);
 
@@ -49,7 +54,12 @@ class Login extends StatelessWidget {
                           borderRadius: const BorderRadius.all(Radius.circular(15)),),
 
                         child: ElevatedButton.icon(
-                          onPressed: () => Navigator.of(context).pop(),
+                          onPressed: () => Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => const MainPage()),
+
+                                (Route<dynamic> route) => false,),
+
                           icon: const Icon(Icons.arrow_back_ios, size: 40, color: Colors.deepOrangeAccent),
                           label: const Text('Back', style: TextStyle(color: Colors.deepOrangeAccent, fontSize: 20, fontWeight: FontWeight.bold,),),
 
@@ -65,7 +75,7 @@ class Login extends StatelessWidget {
 
           body: Columns(), // here the desired height
 
-        )));
+        ))));
   }
 }
 
@@ -115,6 +125,7 @@ class PassFields extends StatefulWidget {
 class ChangePassword extends State {
   late String password= "";
   late String nickname= "";
+
 
   SetPassword(String value){
     setState(() {
@@ -229,6 +240,45 @@ class ChangePassword extends State {
           Auth().signUp(nickname: nickname, password: password);
 
 
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const Loading()),
+          );
+
+
+
+
+          Future<void> Check() async{
+
+            await Future<void>.delayed(Duration(seconds: 2), () {
+
+
+              if (FirebaseAuth.instance.currentUser != null) {
+
+                Navigator.of(context).pushAndRemoveUntil(RouteToGroups(),
+                      (Route<dynamic> route) => false,);
+
+              }
+
+              else {
+
+                Navigator.pop(context);
+
+                showAlertDialog(context);
+
+                print("Not signed in");
+              }
+
+            });
+          }
+
+
+          Check();
+
+
+
+
+
 
           },
           child: const Text("Login",
@@ -236,12 +286,79 @@ class ChangePassword extends State {
                 color: Colors.deepOrangeAccent,
                 fontSize: 25.0,
                 fontStyle: FontStyle.normal),
-          )),
+          )
+
+      ),
     ),],);
 
 
 
   }
+
+  showAlertDialog(BuildContext context) {
+
+    Widget okButton = FlatButton(
+
+
+        onPressed: () {
+
+          Navigator.of(context, rootNavigator: true).pop();
+
+        },
+
+
+        child: Text("OK", style: TextStyle(color: Colors.deepOrangeAccent, fontSize: 25, fontWeight: FontWeight.bold),),);
+
+
+
+    AlertDialog alert = AlertDialog(
+
+
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+
+          side: BorderSide(color: Colors.deepOrangeAccent)),
+
+
+
+
+
+
+        backgroundColor: Colors.black,
+
+
+      title: const Text("Wrong credentials!", style: TextStyle(color: Colors.deepOrangeAccent, fontWeight: FontWeight.bold, fontSize: 20), ),
+
+      actions: [
+
+        okButton,
+
+      ]
+    );
+
+
+
+
+      showDialog(
+
+        context: context,
+
+        builder: (BuildContext context) {
+
+          return alert;
+        }
+
+
+      );
+
+
+
+
+
+
+
+  }
+
 }
 
 
@@ -251,12 +368,15 @@ class ChangePassword extends State {
 
 class Auth {
 
+
+
   Future<String> signUp({required String nickname, required String password}) async{
 
     late final FirebaseAuth _firebaseAuth= FirebaseAuth.instance;
     try{
 
-       _firebaseAuth.signInWithEmailAndPassword(email: nickname, password: password);
+         _firebaseAuth.signInWithEmailAndPassword(email: nickname, password: password);
+
 
       return "Signed in";
     }
@@ -264,6 +384,33 @@ class Auth {
       return "Error";
     }
   }
+}
+
+
+
+
+
+
+Route RouteToGroups() {
+  var curve = Curves.ease;
+  var curveTween = CurveTween(curve: curve);
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => const Groups(),
+
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(4.0, 6.0);
+      const end = Offset.zero;
+      final tween = Tween(begin: begin, end: end);
+      final offsetAnimation = animation.drive(tween);
+      var tweeen = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+      return SlideTransition(
+        position: animation.drive(tweeen),
+        child: child,
+      );
+
+      //https://docs.flutter.dev/cookbook/animation/page-route-animation
+    },
+  );
 }
 
 

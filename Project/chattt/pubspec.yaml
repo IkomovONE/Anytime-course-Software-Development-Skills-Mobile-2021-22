@@ -37,8 +37,11 @@ dependencies:
   cupertino_icons: ^1.0.2
   google_fonts: ^2.3.2
   animations: ^2.0.2
+
   firebase_core: ^1.17.0
   firebase_auth: ^3.3.18
+  loading_animation_widget: ^1.2.0+1
+  restart_app: ^1.1.0+1
 
 dev_dependencies:
   flutter_test:

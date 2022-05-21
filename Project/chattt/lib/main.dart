@@ -7,14 +7,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(const MyApp());
-}
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MainPage extends StatelessWidget {
+  const MainPage({Key? key}) : super(key: key);
 
 
   @override
@@ -97,7 +92,9 @@ class MyApp extends StatelessWidget {
                 color: Theme.of(context).primaryColor,
                 child: const Text("Log in", style: TextStyle(color: Colors.deepOrangeAccent, fontWeight: FontWeight.bold, fontSize: 25),),
                 onPressed: () {
-                  Navigator.of(context).push(RouteToLogin());
+                  Navigator.of(context).pushAndRemoveUntil(RouteToLogin(),
+
+                        (Route<dynamic> route) => false,);
 
                 },
               ),
